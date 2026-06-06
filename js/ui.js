@@ -17,6 +17,7 @@ class UI {
 		this.iterEl = document.getElementById("info-iter");
 		this.menuBtn = document.getElementById("menu-toggle");
 		this.sidebar = document.getElementById("sidebar");
+		this.engineListEl = document.getElementById("engine-list");
 		this.listEl = document.getElementById("palette-list");
 
 		this.benchBar = document.getElementById("bench-bar");
@@ -26,6 +27,8 @@ class UI {
 		this._benchInterval = null;
 		this.benchToggle.checked = false;
 
+		this._engineItems = []; // { li, def }
+		this._buildEngineList();
 		this._items = []; // { li, palette }
 		this._buildPaletteList();
 
@@ -42,6 +45,35 @@ class UI {
 		});
 
 		this.update();
+	}
+
+	_buildEngineList() {
+		this.engineListEl.innerHTML = "";
+		this._engineItems = [];
+
+		ENGINES.forEach((def) => {
+			const li = document.createElement("li");
+			li.className = "palette-item"; // reuse the list-row styling (no swatch)
+
+			const name = document.createElement("span");
+			name.className = "palette-name";
+			name.textContent = def.label;
+
+			li.appendChild(name);
+			li.addEventListener("click", () => this.app.setEngine(def));
+
+			this.engineListEl.appendChild(li);
+			this._engineItems.push({ li: li, def: def });
+		});
+
+		this.updateEngineSelection(this.app.engineDef);
+	}
+
+	/** Highlight the active engine row. */
+	updateEngineSelection(def) {
+		this._engineItems.forEach((item) => {
+			item.li.classList.toggle("active", item.def === def);
+		});
 	}
 
 	_buildPaletteList() {
