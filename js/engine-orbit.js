@@ -189,13 +189,19 @@ class OrbitMandelbrotEngine extends MandelbrotEngine {
 	 * it to the data texture. Orchestration only — see the helpers below.
 	 */
 	onViewChanged(view) {
-		const maxIter = view.maxIterations;
-		const ref = this._pickReference(view);
-		this._refPx = ref.px;
-		this._refPy = ref.py;
-		const height = this._ensureBuffer(maxIter);
-		this._orbitLen = this._computeReferenceOrbit(ref.C, maxIter);
-		this._uploadOrbit(height);
+		const startMs = performance.now();
+		try {
+			const maxIter = view.maxIterations;
+			const ref = this._pickReference(view);
+			this._refPx = ref.px;
+			this._refPy = ref.py;
+			const height = this._ensureBuffer(maxIter);
+			this._orbitLen = this._computeReferenceOrbit(ref.C, maxIter);
+			this._uploadOrbit(height);
+		} finally {
+			const elapsedMs = performance.now() - startMs;
+			console.log("[orbit-dd] onViewChanged " + elapsedMs.toFixed(1) + " ms");
+		}
 	}
 
 	/* ---- reference selection ---- */
