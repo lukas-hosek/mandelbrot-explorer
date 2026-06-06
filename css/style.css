@@ -1,0 +1,256 @@
+/*
+ * Mandelbrot Explorer — dark theme.
+ *
+ *   background : dark blue-grey
+ *   borders    : red
+ *   text       : light blue-grey
+ *
+ * Indentation: tabs (1 tab = 4 spaces).
+ */
+
+:root {
+	--bg:            #161d29;   /* dark blue-grey background        */
+	--bg-panel:      rgba(26, 34, 48, 0.82);
+	--border:        #e74c3c;   /* red borders                      */
+	--border-soft:   rgba(231, 76, 60, 0.55);
+	--text:          #c8d4e0;   /* light blueish-grey text          */
+	--text-dim:      #8a9bb0;
+	--accent:        #e74c3c;
+	--radius:        8px;
+	--panel-pad:     10px 14px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: var(--bg);
+	color: var(--text);
+	font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+	font-size: 14px;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+/* The canvas fills the viewport; touch-action:none lets us own all gestures. */
+#view {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	touch-action: none;
+	cursor: grab;
+}
+
+#view:active {
+	cursor: grabbing;
+}
+
+/* Shared "hovering panel" look: translucent dark fill, red border. */
+.panel {
+	position: fixed;
+	background: var(--bg-panel);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	color: var(--text);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- Top-left info bar ---- */
+#infobar {
+	top: 12px;
+	left: 12px;
+	padding: var(--panel-pad);
+	min-width: 150px;
+	z-index: 10;
+	pointer-events: none;            /* purely informational */
+	font-variant-numeric: tabular-nums;
+}
+
+.info-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	line-height: 1.5;
+}
+
+.info-label {
+	color: var(--text-dim);
+}
+
+.info-value {
+	color: var(--text);
+	font-weight: 600;
+}
+
+/* ---- Hamburger toggle button ---- */
+#menu-toggle {
+	top: 12px;
+	right: 12px;
+	width: 42px;
+	height: 42px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 30;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+	display: block;
+	width: 20px;
+	height: 2px;
+	background: var(--accent);
+	border-radius: 2px;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hamburger {
+	position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+	content: "";
+	position: absolute;
+	left: 0;
+}
+
+.hamburger::before { top: -6px; }
+.hamburger::after  { top:  6px; }
+
+/* Morph into an X when the sidebar is open. */
+#menu-toggle[aria-expanded="true"] .hamburger {
+	background: transparent;
+}
+
+#menu-toggle[aria-expanded="true"] .hamburger::before {
+	transform: translateY(6px) rotate(45deg);
+}
+
+#menu-toggle[aria-expanded="true"] .hamburger::after {
+	transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ---- Right slide-in sidebar ---- */
+#sidebar {
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 240px;
+	max-width: 80vw;
+	border-radius: 0;
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+	padding: 64px 18px 18px;
+	transform: translateX(100%);
+	transition: transform 0.22s ease;
+	z-index: 20;
+	overflow-y: auto;
+}
+
+#sidebar.open {
+	transform: translateX(0);
+}
+
+.sidebar-title {
+	margin: 0 0 14px;
+	font-size: 13px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--text-dim);
+	border-bottom: 1px solid var(--border-soft);
+	padding-bottom: 8px;
+}
+
+.palette-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.palette-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 6px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.palette-item:hover {
+	background: rgba(231, 76, 60, 0.10);
+}
+
+.palette-item.active {
+	border-color: var(--border);
+	background: rgba(231, 76, 60, 0.14);
+}
+
+/* Gradient preview swatch; its background image is filled in by ui.js. */
+.palette-swatch {
+	flex: 0 0 auto;
+	width: 56px;
+	height: 18px;
+	border-radius: 4px;
+	border: 1px solid var(--border-soft);
+}
+
+.palette-name {
+	color: var(--text);
+}
+
+/* ---- Error overlay ---- */
+.error-overlay {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(10, 14, 20, 0.92);
+	z-index: 100;
+}
+
+.error-overlay[hidden] {
+	display: none;
+}
+
+.error-box {
+	max-width: 420px;
+	padding: 24px 28px;
+	text-align: center;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--bg-panel);
+}
+
+.error-box h1 {
+	margin: 0 0 12px;
+	color: var(--accent);
+	font-size: 20px;
+}
+
+.error-box p {
+	margin: 0;
+	color: var(--text);
+	line-height: 1.5;
+}

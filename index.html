@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<title>Mandelbrot Explorer</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<!-- Fullscreen WebGL canvas -->
+	<canvas id="view"></canvas>
+
+	<!-- Top-left hovering info bar -->
+	<div id="infobar" class="panel">
+		<div class="info-row"><span class="info-label">Zoom</span><span id="info-zoom" class="info-value">1.0&times;</span></div>
+		<div class="info-row"><span class="info-label">Iterations</span><span id="info-iter" class="info-value">0</span></div>
+	</div>
+
+	<!-- Top-right hamburger button -->
+	<button id="menu-toggle" class="panel" aria-label="Toggle menu" aria-expanded="false">
+		<span class="hamburger"></span>
+	</button>
+
+	<!-- Right slide-in sidebar -->
+	<aside id="sidebar" class="panel">
+		<h2 class="sidebar-title">Palette</h2>
+		<ul id="palette-list" class="palette-list"></ul>
+	</aside>
+
+	<!-- WebGL-unavailable error overlay (hidden unless triggered) -->
+	<div id="error-overlay" class="error-overlay" hidden>
+		<div class="error-box">
+			<h1>Unable to start</h1>
+			<p id="error-message">WebGL2 is not available in this browser.</p>
+		</div>
+	</div>
+
+	<!-- Classic scripts, loaded in dependency order (no modules) -->
+	<script src="js/palette.js"></script>
+	<script src="js/palettes.js"></script>
+	<script src="js/engine.js"></script>
+	<script src="js/engine-fragment.js"></script>
+	<script src="js/renderer.js"></script>
+	<script src="js/input.js"></script>
+	<script src="js/ui.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
