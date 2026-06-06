@@ -79,7 +79,15 @@ class RainbowPalette extends Palette {
 /* ---- The initial palette set (user-selected) ---- */
 
 const PALETTES = [
-	new RainbowPalette("Rainbow", 1),
+	// The first entry is the app's startup default.
+	new GradientPalette("Plasma", [
+		{ t: 0.00, rgb: [0.0, 0.0, 0.0] },
+		{ t: 0.18, rgb: [0.7, 0.0, 0.0] },
+		{ t: 0.38, rgb: [1.0, 0.45, 0.0] },
+		{ t: 0.58, rgb: [1.0, 1.0, 1.0] },
+		{ t: 0.80, rgb: [0.03, 0.08, 0.28] },
+		{ t: 1.00, rgb: [0.0, 0.0, 0.0] },
+	]),
 
 	// Fire / heat: black -> red -> orange -> yellow -> white.
 	new GradientPalette("Fire", [

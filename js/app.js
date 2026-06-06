@@ -21,7 +21,7 @@ const DEFAULT_CENTER_Y = 0.0;
  * the fragment engine's needs so deep-zoom interiors (Orbit engine) still resolve;
  * the fragment engine simply pixelates before it would hit the higher cap. */
 const BASE_ITER = 120;
-const ITER_PER_ZOOM = 100;
+const ITER_PER_ZOOM = 50;
 const MAX_ITER = 10000;
 
 /* Palette band density (cycles per smooth iteration). Reserved for a future
@@ -43,6 +43,7 @@ const ENGINES = [
 	{ id: "fragment", label: "Fragment-only", create: () => new FragmentMandelbrotEngine() },
 	{ id: "orbit", label: "Orbit", create: () => new OrbitMandelbrotEngine() },
 ];
+const DEFAULT_ENGINE_ID = "orbit";
 
 class App {
 	/**
@@ -72,7 +73,7 @@ class App {
 		this.initialUpp = this.view.unitsPerPixel;
 
 		this.palette = PALETTES[0];
-		this.engineDef = ENGINES[0];           // default: Fragment-only
+		this.engineDef = ENGINES.find((def) => def.id === DEFAULT_ENGINE_ID) || ENGINES[0];
 		this.engine = this.engineDef.create();
 
 		this.ui = null;

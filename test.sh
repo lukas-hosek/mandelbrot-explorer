@@ -77,9 +77,25 @@ check() { # check <description> <test-exit-status>
 
 echo "results:"
 [ -s "${SHOT}" ] && [ "$(wc -c <"${SHOT}")" -gt 5000 ]; check "screenshot rendered (non-blank PNG)" $?
-grep -q 'class="palette-name">Rainbow' "${DOM}"; check "palette 'Rainbow' listed" $?
-grep -q 'class="palette-name">Fire' "${DOM}";    check "palette 'Fire' listed" $?
-grep -q 'class="palette-name">Ocean' "${DOM}";   check "palette 'Ocean' listed" $?
+for palette in Plasma Fire Ocean; do
+	grep -Fq "class=\"palette-name\">${palette}" "${DOM}"
+	check "palette '${palette}' listed" $?
+done
+! grep -Fq 'class="palette-name">Rainbow' "${DOM}"; check "palette 'Rainbow' not listed" $?
+python3 - "${DOM}" <<-'PY'
+	import pathlib, re, sys
+	dom = pathlib.Path(sys.argv[1]).read_text()
+	match = re.search(r'<ul id="palette-list"[^>]*>.*?<li class="palette-item active">.*?<span class="palette-name">([^<]+)</span>', dom, re.S)
+	raise SystemExit(0 if match and match.group(1) == 'Plasma' else 1)
+PY
+check "palette 'Plasma' active by default" $?
+python3 - "${DOM}" <<-'PY'
+	import pathlib, re, sys
+	dom = pathlib.Path(sys.argv[1]).read_text()
+	match = re.search(r'<ul id="engine-list"[^>]*>.*?<li class="palette-item active">.*?<span class="palette-name">([^<]+)</span>', dom, re.S)
+	raise SystemExit(0 if match and match.group(1) == 'Orbit' else 1)
+PY
+check "engine 'Orbit' active by default" $?
 grep -q 'id="info-zoom"[^>]*>[0-9]' "${DOM}";    check "info bar zoom populated" $?
 grep -q 'id="info-iter"[^>]*>[0-9]' "${DOM}";    check "info bar iterations populated" $?
 grep -q 'id="error-overlay"[^>]*hidden' "${DOM}"; check "no boot error overlay shown" $?
