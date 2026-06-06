@@ -57,17 +57,6 @@ class Renderer {
 		this._running = false;
 		this._lastFrameTime = 0;
 
-		this._benchmarkMode = false;
-		this._fpsBuffer = new Float32Array(60);
-		this._fpsBufHead = 0;
-		this._fpsBufCount = 0;
-		this._fps = 0;
-		this._frameTimeMs = 0;
-
-		// MessageChannel used for the uncapped (no-VSync) loop in benchmark mode.
-		this._mc = new MessageChannel();
-		this._mc.port2.onmessage = () => this._uncappedFrame();
-
 		// CPU-side mirror of the UBO, uploaded with bufferSubData when changed.
 		this._viewData = new Float32Array(VIEW_FLOATS);
 
@@ -123,28 +112,6 @@ class Renderer {
 	get dpr() { return this._dpr; }
 	get width() { return this._width; }
 	get height() { return this._height; }
-	get fps() { return this._fps; }
-	get frameTimeMs() { return this._frameTimeMs; }
-
-	setBenchmarkMode(enabled) {
-		const wasEnabled = this._benchmarkMode;
-		this._benchmarkMode = enabled;
-		this._fpsBufHead = 0;
-		this._fpsBufCount = 0;
-		this._fps = 0;
-		this._frameTimeMs = 0;
-		this._dirty = true;
-		// Kick off the uncapped loop if we're switching into benchmark mode while
-		// already running; the rAF loop will stop re-scheduling itself naturally.
-		if (this._running) {
-			if (enabled && !wasEnabled) {
-				this._mc.port1.postMessage(null);
-			} else if (!enabled && wasEnabled) {
-				this._lastFrameTime = performance.now();
-				requestAnimationFrame((now) => this._rafFrame(now));
-			}
-		}
-	}
 
 	/* ---- Engine / palette wiring ---- */
 
@@ -238,11 +205,7 @@ class Renderer {
 		if (this._running) return;
 		this._running = true;
 		this._lastFrameTime = performance.now();
-		if (this._benchmarkMode) {
-			this._mc.port1.postMessage(null);
-		} else {
-			requestAnimationFrame((now) => this._rafFrame(now));
-		}
+		requestAnimationFrame((now) => this._rafFrame(now));
 	}
 
 	stop() {
@@ -250,33 +213,14 @@ class Renderer {
 	}
 
 	_rafFrame(now) {
-		if (!this._running || this._benchmarkMode) return;
+		if (!this._running) return;
 		this._frame(now);
 		requestAnimationFrame((now) => this._rafFrame(now));
-	}
-
-	_uncappedFrame() {
-		if (!this._running || !this._benchmarkMode) return;
-		this._frame(performance.now());
-		this._mc.port1.postMessage(null);
 	}
 
 	_frame(now) {
 		const dt = now - this._lastFrameTime;
 		this._lastFrameTime = now;
-
-		if (this._benchmarkMode) {
-			const buf = this._fpsBuffer;
-			buf[this._fpsBufHead] = dt;
-			this._fpsBufHead = (this._fpsBufHead + 1) % buf.length;
-			if (this._fpsBufCount < buf.length) this._fpsBufCount++;
-			let sum = 0;
-			for (let i = 0; i < this._fpsBufCount; i++) sum += buf[i];
-			const avg = sum / this._fpsBufCount;
-			this._frameTimeMs = avg;
-			this._fps = 1000 / avg;
-			this._dirty = true;
-		}
 
 		const engine = this._engine;
 		if (!engine) return;
