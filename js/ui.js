@@ -19,10 +19,27 @@ class UI {
 		this.sidebar = document.getElementById("sidebar");
 		this.listEl = document.getElementById("palette-list");
 
+		this.benchBar = document.getElementById("bench-bar");
+		this.benchFpsEl = document.getElementById("bench-fps");
+		this.benchFrameEl = document.getElementById("bench-frame");
+		this.benchToggle = document.getElementById("bench-enable");
+		this._benchInterval = null;
+		this.benchToggle.checked = false;
+
 		this._items = []; // { li, palette }
 		this._buildPaletteList();
 
 		this.menuBtn.addEventListener("click", () => this.toggleSidebar());
+		this.benchToggle.addEventListener("change", () => {
+			const enabled = this.benchToggle.checked;
+			this.app.setBenchmarkMode(enabled);
+			this.benchBar.hidden = !enabled;
+			if (enabled) {
+				this._startBenchUpdate();
+			} else {
+				this._stopBenchUpdate();
+			}
+		});
 
 		this.update();
 	}
@@ -70,6 +87,24 @@ class UI {
 	update() {
 		this.zoomEl.textContent = formatZoom(this.app.zoom);
 		this.iterEl.textContent = String(this.app.view.maxIterations);
+	}
+
+	_startBenchUpdate() {
+		if (this._benchInterval) return;
+		this._benchInterval = setInterval(() => {
+			const r = this.app.renderer;
+			this.benchFpsEl.textContent = r.fps.toFixed(1) + " fps";
+			this.benchFrameEl.textContent = r.frameTimeMs.toFixed(2) + " ms";
+		}, 100);
+	}
+
+	_stopBenchUpdate() {
+		if (this._benchInterval) {
+			clearInterval(this._benchInterval);
+			this._benchInterval = null;
+		}
+		this.benchFpsEl.textContent = "—";
+		this.benchFrameEl.textContent = "—";
 	}
 }
 

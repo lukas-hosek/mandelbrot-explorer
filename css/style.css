@@ -92,6 +92,21 @@ html, body {
 	font-weight: 600;
 }
 
+/* ---- Bottom-left benchmark bar ---- */
+#bench-bar {
+	bottom: 12px;
+	left: 12px;
+	padding: var(--panel-pad);
+	min-width: 150px;
+	z-index: 10;
+	pointer-events: none;
+	font-variant-numeric: tabular-nums;
+}
+
+#bench-bar[hidden] {
+	display: none;
+}
+
 /* ---- Hamburger toggle button ---- */
 #menu-toggle {
 	top: 12px;
@@ -217,6 +232,30 @@ html, body {
 
 .palette-name {
 	color: var(--text);
+}
+
+/* Sidebar title variant with top spacing to separate sections */
+.sidebar-title--spaced {
+	margin-top: 20px;
+}
+
+/* Benchmark mode checkbox row */
+.bench-toggle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	color: var(--text);
+	padding: 4px 0;
+	font-size: 14px;
+}
+
+.bench-toggle input[type="checkbox"] {
+	accent-color: var(--accent);
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+	flex-shrink: 0;
 }
 
 /* ---- Error overlay ---- */

@@ -176,6 +176,12 @@ class App {
 		}
 	}
 
+	/* ---- Benchmark ---- */
+
+	setBenchmarkMode(enabled) {
+		this.renderer.setBenchmarkMode(enabled);
+	}
+
 	/* ---- Resize ---- */
 
 	handleResize() {

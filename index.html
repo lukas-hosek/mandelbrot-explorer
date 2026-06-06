@@ -21,10 +21,21 @@
 		<span class="hamburger"></span>
 	</button>
 
+	<!-- Bottom-left benchmark floating bar -->
+	<div id="bench-bar" class="panel" hidden>
+		<div class="info-row"><span class="info-label">FPS</span><span id="bench-fps" class="info-value">—</span></div>
+		<div class="info-row"><span class="info-label">Frame</span><span id="bench-frame" class="info-value">—</span></div>
+	</div>
+
 	<!-- Right slide-in sidebar -->
 	<aside id="sidebar" class="panel">
 		<h2 class="sidebar-title">Palette</h2>
 		<ul id="palette-list" class="palette-list"></ul>
+		<h2 class="sidebar-title sidebar-title--spaced">Benchmark</h2>
+		<label class="bench-toggle">
+			<input type="checkbox" id="bench-enable">
+			<span>Show benchmark</span>
+		</label>
 	</aside>
 
 	<!-- WebGL-unavailable error overlay (hidden unless triggered) -->
