@@ -8,6 +8,7 @@
  * engine-agnostic GPU host.
  *
  * Depends on globals: Renderer, FragmentMandelbrotEngine, OrbitMandelbrotEngine,
+ * ScaledOrbitMandelbrotEngine,
  * ComplexDD, PALETTES, UI, InputController.
  */
 
@@ -42,6 +43,7 @@ const MIN_UPP_FACTOR = 1e-30;    // upp >= initialUpp * 1e-30
 const ENGINES = [
 	{ id: "fragment", label: "Fragment-only", create: () => new FragmentMandelbrotEngine() },
 	{ id: "orbit", label: "Orbit", create: () => new OrbitMandelbrotEngine() },
+	{ id: "scaled-orbit", label: "Scaled Orbit", create: () => new ScaledOrbitMandelbrotEngine() },
 ];
 const DEFAULT_ENGINE_ID = "orbit";
 
