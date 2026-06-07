@@ -93,9 +93,9 @@ python3 - "${DOM}" <<-'PY'
 	import pathlib, re, sys
 	dom = pathlib.Path(sys.argv[1]).read_text()
 	match = re.search(r'<ul id="engine-list"[^>]*>.*?<li class="palette-item active">.*?<span class="palette-name">([^<]+)</span>', dom, re.S)
-	raise SystemExit(0 if match and match.group(1) == 'Orbit' else 1)
+	raise SystemExit(0 if match and match.group(1) == 'Scaled Orbit' else 1)
 PY
-check "engine 'Orbit' active by default" $?
+check "engine 'Scaled Orbit' active by default" $?
 grep -q 'id="info-zoom"[^>]*>[0-9]' "${DOM}";    check "info bar zoom populated" $?
 grep -q 'id="info-iter"[^>]*>[0-9]' "${DOM}";    check "info bar iterations populated" $?
 grep -q 'id="error-overlay"[^>]*hidden' "${DOM}"; check "no boot error overlay shown" $?

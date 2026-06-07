@@ -35,7 +35,7 @@ const COLOR_SCALE = 0.02;
  * keeps the framing precise; the shader's single-precision epsilon is the real
  * soft limit, ~1e15-1e20). The fragment engine pixelates long before this. */
 const MAX_ZOOM_OUT = 4;          // upp <= initialUpp * 4
-const MIN_UPP_FACTOR = 1e-30;    // upp >= initialUpp * 1e-30
+const MIN_UPP_FACTOR = 1e-40;    // upp >= initialUpp * 1e-40
 
 /* Available engines, listed in the sidebar. Entries are descriptors with a
  * factory: only one engine is live at a time, so the App creates/disposes
@@ -45,7 +45,7 @@ const ENGINES = [
 	{ id: "orbit", label: "Orbit", create: () => new OrbitMandelbrotEngine() },
 	{ id: "scaled-orbit", label: "Scaled Orbit", create: () => new ScaledOrbitMandelbrotEngine() },
 ];
-const DEFAULT_ENGINE_ID = "orbit";
+const DEFAULT_ENGINE_ID = "scaled-orbit";
 
 class App {
 	/**
