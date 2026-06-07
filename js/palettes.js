@@ -82,9 +82,9 @@ const PALETTES = [
 	// The first entry is the app's startup default.
 	new GradientPalette("Plasma", [
 		{ t: 0.00, rgb: [0.0, 0.0, 0.0] },
-		{ t: 0.18, rgb: [0.7, 0.0, 0.0] },
-		{ t: 0.38, rgb: [1.0, 0.45, 0.0] },
-		{ t: 0.58, rgb: [1.0, 1.0, 1.0] },
+		{ t: 0.20, rgb: [0.7, 0.0, 0.0] },
+		{ t: 0.40, rgb: [1.0, 0.45, 0.0] },
+		{ t: 0.60, rgb: [1.0, 1.0, 1.0] },
 		{ t: 0.80, rgb: [0.03, 0.08, 0.28] },
 		{ t: 1.00, rgb: [0.0, 0.0, 0.0] },
 	]),
@@ -98,11 +98,20 @@ const PALETTES = [
 		{ t: 1.00, rgb: [1.0, 1.0, 1.0] },
 	]),
 
-	// Ocean / ice: deep navy -> blue -> cyan -> white. Suits the dark theme.
+	// Ocean / ice: black -> deep navy -> blue -> cyan -> white -> black.
 	new GradientPalette("Ocean", [
-		{ t: 0.00, rgb: [0.02, 0.05, 0.18] },
-		{ t: 0.35, rgb: [0.05, 0.25, 0.55] },
-		{ t: 0.70, rgb: [0.20, 0.70, 0.90] },
-		{ t: 1.00, rgb: [0.95, 0.99, 1.0] },
+		{ t: 0.00, rgb: [0.0, 0.0, 0.0] },
+		{ t: 0.25, rgb: [0.05, 0.25, 0.55] },
+		{ t: 0.50, rgb: [0.20, 0.70, 0.90] },
+		{ t: 0.75, rgb: [0.95, 0.99, 1.0] },
+		{ t: 1.00, rgb: [0.0, 0.0, 0.0] },
+	]),
+
+	// Aurora: black -> green -> magenta -> black.
+	new GradientPalette("Aurora", [
+		{ t: 0.00, rgb: [0.0, 0.0, 0.0] },
+		{ t: 0.35, rgb: [0.05, 0.78, 0.25] },
+		{ t: 0.70, rgb: [1.0, 0.18, 0.82] },
+		{ t: 1.00, rgb: [0.0, 0.0, 0.0] },
 	]),
 ];

@@ -77,7 +77,7 @@ check() { # check <description> <test-exit-status>
 
 echo "results:"
 [ -s "${SHOT}" ] && [ "$(wc -c <"${SHOT}")" -gt 5000 ]; check "screenshot rendered (non-blank PNG)" $?
-for palette in Plasma Fire Ocean; do
+for palette in Plasma Fire Ocean Aurora; do
 	grep -Fq "class=\"palette-name\">${palette}" "${DOM}"
 	check "palette '${palette}' listed" $?
 done
